@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="Mm6flG" name="EP-491-String" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
   <MAINGROUP id="m3yyGq" name="EP-491-String">
     <GROUP id="{BE851790-0BB9-6AA9-5B4E-8C84F97B67ED}" name="Source">
       <FILE id="qkrySE" name="PluginProcessor.cpp" compile="1" resource="0"

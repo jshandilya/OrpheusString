@@ -8,6 +8,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "Voice.h"
 
 //==============================================================================
 EP491StringAudioProcessor::EP491StringAudioProcessor()
@@ -19,9 +20,15 @@ EP491StringAudioProcessor::EP491StringAudioProcessor()
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
                      #endif
-                       )
+                       ), apvts (*this, nullptr, "Parameters", createParams())
 #endif
 {
+    synth.addSound (new Sound());
+    
+    for (int i = 0; i < 6; i++)
+    {
+        synth.addVoice (new Voice());
+    }
 }
 
 EP491StringAudioProcessor::~EP491StringAudioProcessor()
@@ -93,8 +100,7 @@ void EP491StringAudioProcessor::changeProgramName (int index, const juce::String
 //==============================================================================
 void EP491StringAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
+    synth.setCurrentPlaybackSampleRate (sampleRate);
 }
 
 void EP491StringAudioProcessor::releaseResources()
@@ -135,27 +141,25 @@ void EP491StringAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
 
-    // In case we have more outputs than inputs, this code clears any output
-    // channels that didn't contain input data, (because these aren't
-    // guaranteed to be empty - they may contain garbage).
-    // This is here to avoid people getting screaming feedback
-    // when they first compile a plugin, but obviously you don't need to keep
-    // this code if your algorithm always overwrites all the output channels.
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
-
-    // This is the place where you'd normally do the guts of your plugin's
-    // audio processing...
-    // Make sure to reset the state if your inner loop is processing
-    // the samples and the outer loop is handling the channels.
-    // Alternatively, you can process the samples with the channels
-    // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
+    
+    for (int i = 0; i < synth.getNumVoices(); ++i)
     {
-        auto* channelData = buffer.getWritePointer (channel);
-
-        // ..do something to the data...
+        if (auto voice = dynamic_cast<Voice*>(synth.getVoice(i)))
+        {
+            auto& L = *apvts.getRawParameterValue("LOWPASS");
+            auto& rho = *apvts.getRawParameterValue("RHO");
+            auto& S = *apvts.getRawParameterValue("DECAY");
+            auto& t60 = *apvts.getRawParameterValue("TAILOFF");
+            auto& attack = *apvts.getRawParameterValue("ATTACK");
+            auto& mu = *apvts.getRawParameterValue("PICK");
+            
+            voice->setVoiceParams (L, rho, S, mu, t60, attack);
+        }
     }
+    
+    synth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
 }
 
 //==============================================================================
@@ -189,3 +193,23 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new EP491StringAudioProcessor();
 }
+
+juce::AudioProcessorValueTreeState::ParameterLayout EP491StringAudioProcessor::createParams()
+{
+    std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
+    
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "LOWPASS", 1 }, "Lowpass", juce::NormalisableRange<float> { 80.0f, 1400.0f, 0.1f }, 1400.0f));
+
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "RHO", 1 }, "Rho", juce::NormalisableRange<float> { 0.8f, 1.0f, 0.001f }, 1.0f));
+    
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "DECAY", 1 }, "Decay", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.001f }, 0.5f));
+    
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "TAILOFF", 1 }, "Tailoff", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.001f }, 0.5f));
+    
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "ATTACK", 1 }, "Attack", juce::NormalisableRange<float> { 0.2f, 10.0f, 0.1f }, 0.8f));
+    
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "PICK", 1 }, "Pick", juce::NormalisableRange<float> { 0.01f, 1.0f, 0.001f }, 0.5f));
+    
+    return { params.begin(), params.end() };
+}
+

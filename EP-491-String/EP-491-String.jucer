@@ -11,6 +11,10 @@
       <FILE id="FwFQIq" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="cMwvuh" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="hdgYk3" name="Sound.cpp" compile="1" resource="0" file="Source/Sound.cpp"/>
+      <FILE id="AIA4Xc" name="Sound.h" compile="0" resource="0" file="Source/Sound.h"/>
+      <FILE id="vcxn0U" name="Voice.cpp" compile="1" resource="0" file="Source/Voice.cpp"/>
+      <FILE id="ymZ6hw" name="Voice.h" compile="0" resource="0" file="Source/Voice.h"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>

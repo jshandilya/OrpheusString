@@ -13,7 +13,8 @@
 EP491StringAudioProcessorEditor::EP491StringAudioProcessorEditor (EP491StringAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    setSliderWithLabel (lowpassSlider, lowpassLabel, audioProcessor.apvts, "LOWPASS", lowpassAttachment);
+    setFreqSliderWithLabel (lowpassSlider, lowpassLabel, audioProcessor.apvts, "LOWPASS", lowpassAttachment);
+    
     setSliderWithLabel (rhoSlider, rhoLabel, audioProcessor.apvts, "RHO", rhoAttachment);
     setSliderWithLabel (decaySlider, decayLabel, audioProcessor.apvts, "DECAY", decayAttachment);
     setSliderWithLabel (tailSlider, tailLabel, audioProcessor.apvts, "TAILOFF", tailAttachment);
@@ -50,17 +51,17 @@ void EP491StringAudioProcessorEditor::resized()
     const auto labelYOffset = 20;
     const auto labelHeight = 20;
     
-    rhoSlider.setBounds (25, 50, sliderWidth, sliderHeight);
-    rhoLabel.setBounds (rhoSlider.getX(), rhoSlider.getY() - labelYOffset, rhoSlider.getWidth(), labelHeight);
+    attackSlider.setBounds (25, 50, sliderWidth, sliderHeight);
+    attackLabel.setBounds (attackSlider.getX(), attackSlider.getY() - labelYOffset, attackSlider.getWidth(), labelHeight);
     
     decaySlider.setBounds (125, 50, sliderWidth, sliderHeight);
     decayLabel.setBounds (decaySlider.getX(), decaySlider.getY() - labelYOffset, decaySlider.getWidth(), labelHeight);
     
-    tailSlider.setBounds (225, 50, sliderWidth, sliderHeight);
-    tailLabel.setBounds (tailSlider.getX(), tailSlider.getY() - labelYOffset, tailSlider.getWidth(), labelHeight);
+    rhoSlider.setBounds (225, 50, sliderWidth, sliderHeight);
+    rhoLabel.setBounds (rhoSlider.getX(), rhoSlider.getY() - labelYOffset, rhoSlider.getWidth(), labelHeight);
     
-    attackSlider.setBounds (325, 50, sliderWidth, sliderHeight);
-    attackLabel.setBounds (attackSlider.getX(), attackSlider.getY() - labelYOffset, attackSlider.getWidth(), labelHeight);
+    tailSlider.setBounds (325, 50, sliderWidth, sliderHeight);
+    tailLabel.setBounds (tailSlider.getX(), tailSlider.getY() - labelYOffset, tailSlider.getWidth(), labelHeight);
     
     pickSlider.setBounds (425, 50, sliderWidth, sliderHeight);
     pickLabel.setBounds (pickSlider.getX(), pickSlider.getY() - labelYOffset, pickSlider.getWidth(), labelHeight);
@@ -86,7 +87,7 @@ void EP491StringAudioProcessorEditor::resized()
     reverbFreezeSlider.setBounds (525, 200, sliderWidth, sliderHeight);
     reverbFreezeLabel.setBounds (reverbFreezeSlider.getX(), reverbFreezeSlider.getY() - labelYOffset, reverbFreezeSlider.getWidth(), labelHeight);
     
-    outputSlider.setBounds (25, 300, 600, 100);
+    outputSlider.setBounds (20, 300, 600, 100);
 //    outputLabel.setBounds (outputSlider.getleft, outputSlider.getY(), outputSlider.getWidth(), labelHeight);
 }
 
@@ -104,10 +105,10 @@ void EP491StringAudioProcessorEditor::setSliderWithLabel (juce::Slider& slider, 
     addAndMakeVisible(label);
 }
 
-void EP491StringAudioProcessorEditor::setMixSliderWithLabel (juce::Slider& slider, juce::Label& label, juce::AudioProcessorValueTreeState& apvts, juce::String paramID, std::unique_ptr<SliderAttachment>& attachment)
+void EP491StringAudioProcessorEditor::setFreqSliderWithLabel (juce::Slider& slider, juce::Label& label, juce::AudioProcessorValueTreeState& apvts, juce::String paramID, std::unique_ptr<SliderAttachment>& attachment)
 {
-    slider.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
-    slider.setTextBoxStyle(juce::Slider::TextBoxRight, false, 100, 25);
+    slider.setSliderStyle(juce::Slider::SliderStyle::RotaryHorizontalVerticalDrag);
+    slider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 75, 25);
     addAndMakeVisible(slider);
     
     attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(apvts, paramID, slider);
@@ -115,5 +116,25 @@ void EP491StringAudioProcessorEditor::setMixSliderWithLabel (juce::Slider& slide
     label.setColour(juce::Label::ColourIds::textColourId, juce::Colours::white);
     label.setFont(15.0f);
     label.setJustificationType(juce::Justification::centred);
+    
+    slider.setTextValueSuffix (" Hz");
+    
+    addAndMakeVisible(label);
+}
+
+void EP491StringAudioProcessorEditor::setMixSliderWithLabel (juce::Slider& slider, juce::Label& label, juce::AudioProcessorValueTreeState& apvts, juce::String paramID, std::unique_ptr<SliderAttachment>& attachment)
+{
+    slider.setSliderStyle(juce::Slider::SliderStyle::LinearHorizontal);
+    slider.setTextBoxStyle(juce::Slider::TextBoxRight, false, 75, 25);
+    addAndMakeVisible(slider);
+    
+    attachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(apvts, paramID, slider);
+    
+    label.setColour(juce::Label::ColourIds::textColourId, juce::Colours::white);
+    label.setFont(15.0f);
+    label.setJustificationType(juce::Justification::centred);
+    
+    slider.setTextValueSuffix (" dB");
+    
     addAndMakeVisible(label);
 }

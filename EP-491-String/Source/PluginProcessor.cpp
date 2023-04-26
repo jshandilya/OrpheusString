@@ -240,7 +240,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout EP491StringAudioProcessor::c
     // String params
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "LOWPASS", 1 }, "Lowpass", juce::NormalisableRange<float> { 80.0f, 1400.0f, 0.1f }, 1400.0f));
 
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "RHO", 1 }, "Rho", juce::NormalisableRange<float> { 0.8f, 1.0f, 0.00001f }, 1.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "RHO", 1 }, "Rho", juce::NormalisableRange<float> { 0.8f, 1.0f, 0.001f }, 1.0f));
     
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "DECAY", 1 }, "Decay", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.001f }, 0.5f));
     
@@ -251,12 +251,12 @@ juce::AudioProcessorValueTreeState::ParameterLayout EP491StringAudioProcessor::c
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "PICK", 1 }, "Pick", juce::NormalisableRange<float> { 0.01f, 1.0f, 0.001f }, 0.5f));
     
     // Reverb paarams
-    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBSIZE", "Reverb Size", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.1f }, 0.0f, ""));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBWIDTH", "Reverb Width", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.1f }, 1.0f, ""));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBDAMPING", "Reverb Damping", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.1f }, 0.5f, ""));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBDRY", "Reverb Dry", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.1f }, 1.0f, ""));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBWET", "Reverb Wet", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.1f }, 0.0f, ""));
-    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBFREEZE", "Reverb Freeze", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.1f }, 0.0f, ""));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBSIZE", "Reverb Size", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.01f }, 0.0f, ""));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBWIDTH", "Reverb Width", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.01f }, 1.0f, ""));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBDAMPING", "Reverb Damping", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.01f }, 0.5f, ""));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBDRY", "Reverb Dry", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.01f }, 1.0f, ""));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBWET", "Reverb Wet", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.01f }, 0.0f, ""));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBFREEZE", "Reverb Freeze", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.01f }, 0.0f, ""));
     
     // Mix params
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "OUTPUT", 1 }, "Output", juce::NormalisableRange<float> { -30.f, 10.0f, 0.01f}, 0.0f));

@@ -25,7 +25,7 @@ EP491StringAudioProcessor::EP491StringAudioProcessor()
 {
     synth.addSound (new Sound());
     
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 4; i++)
     {
         synth.addVoice (new Voice());
     }
@@ -101,6 +101,20 @@ void EP491StringAudioProcessor::changeProgramName (int index, const juce::String
 void EP491StringAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     synth.setCurrentPlaybackSampleRate (sampleRate);
+    
+    juce::dsp::ProcessSpec spec;
+    spec.maximumBlockSize = samplesPerBlock;
+    spec.sampleRate = sampleRate;
+    spec.numChannels = getTotalNumOutputChannels();
+    
+    reverbParams.roomSize = 0.5f;
+    reverbParams.width = 1.0f;
+    reverbParams.damping = 0.5f;
+    reverbParams.freezeMode = 0.0f;
+    reverbParams.dryLevel = 1.0f;
+    reverbParams.wetLevel = 0.0f;
+    
+    reverb.setParameters (reverbParams);
 }
 
 void EP491StringAudioProcessor::releaseResources()
@@ -151,15 +165,26 @@ void EP491StringAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
             auto& L = *apvts.getRawParameterValue("LOWPASS");
             auto& rho = *apvts.getRawParameterValue("RHO");
             auto& S = *apvts.getRawParameterValue("DECAY");
+            auto& mu = *apvts.getRawParameterValue("PICK");
             auto& t60 = *apvts.getRawParameterValue("TAILOFF");
             auto& attack = *apvts.getRawParameterValue("ATTACK");
-            auto& mu = *apvts.getRawParameterValue("PICK");
             
             voice->setVoiceParams (L, rho, S, mu, t60, attack);
         }
     }
     
+    reverbParams.roomSize = *apvts.getRawParameterValue ("REVERBSIZE");
+    reverbParams.width = *apvts.getRawParameterValue ("REVERBWIDTH");
+    reverbParams.damping = *apvts.getRawParameterValue ("REVERBDAMPING");
+    reverbParams.dryLevel = *apvts.getRawParameterValue ("REVERBDRY");
+    reverbParams.wetLevel = *apvts.getRawParameterValue ("REVERBWET");
+    reverbParams.freezeMode = *apvts.getRawParameterValue ("REVERBFREEZE");
+    
+    reverb.setParameters (reverbParams);
+    
     synth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
+    juce::dsp::AudioBlock<float> block { buffer };
+    reverb.process (juce::dsp::ProcessContextReplacing<float> (block));
 }
 
 //==============================================================================
@@ -200,7 +225,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout EP491StringAudioProcessor::c
     
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "LOWPASS", 1 }, "Lowpass", juce::NormalisableRange<float> { 80.0f, 1400.0f, 0.1f }, 1400.0f));
 
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "RHO", 1 }, "Rho", juce::NormalisableRange<float> { 0.8f, 1.0f, 0.001f }, 1.0f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "RHO", 1 }, "Rho", juce::NormalisableRange<float> { 0.8f, 1.0f, 0.00001f }, 1.0f));
     
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "DECAY", 1 }, "Decay", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.001f }, 0.5f));
     
@@ -209,6 +234,13 @@ juce::AudioProcessorValueTreeState::ParameterLayout EP491StringAudioProcessor::c
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "ATTACK", 1 }, "Attack", juce::NormalisableRange<float> { 0.2f, 10.0f, 0.1f }, 0.8f));
     
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "PICK", 1 }, "Pick", juce::NormalisableRange<float> { 0.01f, 1.0f, 0.001f }, 0.5f));
+    
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBSIZE", "Reverb Size", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.1f }, 0.0f, ""));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBWIDTH", "Reverb Width", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.1f }, 1.0f, ""));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBDAMPING", "Reverb Damping", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.1f }, 0.5f, ""));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBDRY", "Reverb Dry", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.1f }, 1.0f, ""));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBWET", "Reverb Wet", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.1f }, 0.0f, ""));
+    params.push_back (std::make_unique<juce::AudioParameterFloat>("REVERBFREEZE", "Reverb Freeze", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.1f }, 0.0f, ""));
     
     return { params.begin(), params.end() };
 }

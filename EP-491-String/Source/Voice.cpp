@@ -108,7 +108,14 @@ void Voice::setVoiceParams (float L, float rho, float S, float mu, float t60, fl
 
 void Voice::calculatePitchInfo(int midiNote, int pitchWheelPosition)
 {
-    currentNote = midiNote;
+    if (midiNote > 96)
+    {
+        currentNote = 0;
+    }
+    else
+    {
+        currentNote = midiNote;
+    }
     
     // frequency taking into account pitch bend
     float freq = 440 * std::pow(2, (midiNote - 69) / 12.f + (pitchWheelPosition - 8192) / (12.f * 16384 / (2 * mPitchBendSemitones)));

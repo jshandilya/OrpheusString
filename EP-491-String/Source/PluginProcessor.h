@@ -63,8 +63,11 @@ private:
     juce::Synthesiser synth;
     
     void setNumVoices();
-    
+    void setReverbParams();
     juce::AudioProcessorValueTreeState::ParameterLayout createParams();
+    
+    juce::dsp::Reverb reverb;
+    juce::dsp::Reverb::Parameters reverbParams;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (EP491StringAudioProcessor)

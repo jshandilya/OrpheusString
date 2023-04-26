@@ -15,6 +15,8 @@
 class Sound : public juce::SynthesiserSound
 {
 public:
+    Sound() {}
+    
     bool appliesToNote (int midiNoteNumber) override { return true; }
     bool appliesToChannel(int midiChannel) override { return true; }
 };
@@ -22,6 +24,9 @@ public:
 class Voice : public juce::SynthesiserVoice
 {
 public:
+    Voice() {};
+    ~Voice() {};
+    
     void startNote(int midiNote, float velocity, juce::SynthesiserSound*, int currentPitchWheelPosition) override;
     void stopNote(float velocity, bool allowTailOff) override;
 
@@ -34,13 +39,13 @@ public:
     
     void setVoiceParams (float L, float rho, float S, float mu, float t60, float pickStrengthFactor);
     
-    float mL = 400;
-    float mRho = 0.99;
-    float mS = 0.5;
-    float mMu = 0.1;
-    float mT60 = 0.1;
-    int mPitchBendSemitones = 12;
-    float mPickStrengthFactor = 1.f;
+    float mL = 0.f;
+    float mRho = 0.f;
+    float mS = 0.f;
+    float mMu = 0.f;
+    float mT60 = 0.f;
+    int mPitchBendSemitones = 0;
+    float mPickStrengthFactor = 0.f;
     
 private:
     juce::Random rand;
@@ -75,4 +80,6 @@ private:
 
     void calculatePitchInfo(int midiNote, int pwPosition);
     void createExcitation(float velocity);
+    
+    juce::MidiKeyboardState midiKeyboard;
 };

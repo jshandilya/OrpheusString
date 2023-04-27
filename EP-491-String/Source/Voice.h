@@ -39,13 +39,22 @@ public:
     
     void setVoiceParams (float L, float rho, float S, float mu, float t60, float pickStrengthFactor);
     
-    float mL = 0.f;
-    float mRho = 0.f;
-    float mS = 0.f;
-    float mMu = 0.f;
-    float mT60 = 0.f;
-    int mPitchBendSemitones = 0;
-    float mPickStrengthFactor = 0.f;
+//    float mL = 0.f;
+//    float mRho = 0.f;
+//    float mS = 0.f;
+//    float mMu = 0.f;
+//    float mT60 = 0.f;
+//    int mPitchBendSemitones = 0;
+//    float mPickStrengthFactor = 0.f;
+    
+    
+    float mL = 400.f;
+    float mRho = 0.99f;
+    float mS = 0.5f;
+    float mMu = 0.1f;
+    float mT60 = 0.1f;
+    int mPitchBendSemitones = 12.f;
+    float mPickStrengthFactor = 1.f;
     
 private:
     juce::Random rand;

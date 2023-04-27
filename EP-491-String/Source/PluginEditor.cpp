@@ -51,32 +51,32 @@ void EP491StringAudioProcessorEditor::resized()
     const auto labelYOffset = 20;
     const auto labelHeight = 20;
     
-    attackSlider.setBounds (25, 50, sliderWidth, sliderHeight);
+    pickSlider.setBounds (25, 50, sliderWidth, sliderHeight);
+    pickLabel.setBounds (pickSlider.getX(), pickSlider.getY() - labelYOffset, pickSlider.getWidth(), labelHeight);
+    
+    attackSlider.setBounds (125, 50, sliderWidth, sliderHeight);
     attackLabel.setBounds (attackSlider.getX(), attackSlider.getY() - labelYOffset, attackSlider.getWidth(), labelHeight);
     
-    decaySlider.setBounds (125, 50, sliderWidth, sliderHeight);
+    decaySlider.setBounds (225, 50, sliderWidth, sliderHeight);
     decayLabel.setBounds (decaySlider.getX(), decaySlider.getY() - labelYOffset, decaySlider.getWidth(), labelHeight);
     
-    rhoSlider.setBounds (225, 50, sliderWidth, sliderHeight);
+    rhoSlider.setBounds (325, 50, sliderWidth, sliderHeight);
     rhoLabel.setBounds (rhoSlider.getX(), rhoSlider.getY() - labelYOffset, rhoSlider.getWidth(), labelHeight);
     
-    tailSlider.setBounds (325, 50, sliderWidth, sliderHeight);
+    tailSlider.setBounds (425, 50, sliderWidth, sliderHeight);
     tailLabel.setBounds (tailSlider.getX(), tailSlider.getY() - labelYOffset, tailSlider.getWidth(), labelHeight);
-    
-    pickSlider.setBounds (425, 50, sliderWidth, sliderHeight);
-    pickLabel.setBounds (pickSlider.getX(), pickSlider.getY() - labelYOffset, pickSlider.getWidth(), labelHeight);
     
     lowpassSlider.setBounds (525, 50, sliderWidth, sliderHeight);
     lowpassLabel.setBounds (lowpassSlider.getX(), lowpassSlider.getY() - labelYOffset, lowpassSlider.getWidth(), labelHeight);
     
-    reverbSizeSlider.setBounds (25, 200, sliderWidth, sliderHeight);
+    reverbDampSlider.setBounds (25, 200, sliderWidth, sliderHeight);
+    reverbDampLabel.setBounds (reverbDampSlider.getX(), reverbDampSlider.getY() - labelYOffset, reverbDampSlider.getWidth(), labelHeight);
+    
+    reverbSizeSlider.setBounds (125, 200, sliderWidth, sliderHeight);
     reverbSizeLabel.setBounds (reverbSizeSlider.getX(), reverbSizeSlider.getY() - labelYOffset, reverbSizeSlider.getWidth(), labelHeight);
     
-    reverbWidthSlider.setBounds (125, 200, sliderWidth, sliderHeight);
+    reverbWidthSlider.setBounds (225, 200, sliderWidth, sliderHeight);
     reverbWidthLabel.setBounds (reverbWidthSlider.getX(), reverbWidthSlider.getY() - labelYOffset, reverbWidthSlider.getWidth(), labelHeight);
-    
-    reverbDampSlider.setBounds (225, 200, sliderWidth, sliderHeight);
-    reverbDampLabel.setBounds (reverbDampSlider.getX(), reverbDampSlider.getY() - labelYOffset, reverbDampSlider.getWidth(), labelHeight);
     
     reverbDrySlider.setBounds (325, 200, sliderWidth, sliderHeight);
     reverbDryLabel.setBounds (reverbDrySlider.getX(), reverbDrySlider.getY() - labelYOffset, reverbDrySlider.getWidth(), labelHeight);

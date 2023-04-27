@@ -29,10 +29,13 @@ EP491StringAudioProcessor::EP491StringAudioProcessor()
     {
         synth.addVoice (new Voice());
     }
+    
+    reverb.reset();
 }
 
 EP491StringAudioProcessor::~EP491StringAudioProcessor()
 {
+    reverb.reset();
 }
 
 //==============================================================================
@@ -100,6 +103,8 @@ void EP491StringAudioProcessor::changeProgramName (int index, const juce::String
 //==============================================================================
 void EP491StringAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    reverb.reset();
+    
     synth.setCurrentPlaybackSampleRate (sampleRate);
     
     juce::dsp::ProcessSpec spec;
@@ -172,7 +177,7 @@ void EP491StringAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, 
             voice->setVoiceParams (L, rho, S, mu, t60, attack);
         }
     }
-    
+
     reverbParams.roomSize = *apvts.getRawParameterValue ("REVERBSIZE");
     reverbParams.width = *apvts.getRawParameterValue ("REVERBWIDTH");
     reverbParams.damping = *apvts.getRawParameterValue ("REVERBDAMPING");
@@ -246,7 +251,7 @@ juce::AudioProcessorValueTreeState::ParameterLayout EP491StringAudioProcessor::c
     
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "TAILOFF", 1 }, "Tailoff", juce::NormalisableRange<float> { 0.0f, 1.0f, 0.001f }, 0.5f));
     
-    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "ATTACK", 1 }, "Attack", juce::NormalisableRange<float> { 0.2f, 10.0f, 0.1f }, 0.8f));
+    params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "ATTACK", 1 }, "Attack", juce::NormalisableRange<float> { 0.8f, 10.0f, 0.1f }, 0.8f));
     
     params.push_back(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID { "PICK", 1 }, "Pick", juce::NormalisableRange<float> { 0.01f, 1.0f, 0.001f }, 0.5f));
     

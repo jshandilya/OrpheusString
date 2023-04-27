@@ -34,7 +34,7 @@ private:
     
     juce::Slider tailSlider, attackSlider, pickSlider;
     std::unique_ptr<SliderAttachment> tailAttachment, attackAttachment, pickAttachment;
-    juce::Label tailLabel { "Release", "Release" }, attackLabel { "Attack", "Attack" }, pickLabel { "Pick", "Pick" };
+    juce::Label tailLabel { "Release", "Release" }, attackLabel { "Attack", "Attack" }, pickLabel { "Pluck", "Pluck" };
     
     juce::Slider reverbSizeSlider, reverbWidthSlider, reverbDampSlider;
     std::unique_ptr<SliderAttachment> reverbSizeAttachment, reverbWidthAttachment, reverbDampAttachment;

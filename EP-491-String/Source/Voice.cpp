@@ -22,12 +22,22 @@ void Voice::startNote(int midiNote, float velocity, juce::SynthesiserSound*, int
         lowpassDelayBuffer[i] = 0;
     }
     
-    calculatePitchInfo (midiNote, currentPitchWheelPosition);
+    if (midiNote <= 84)
+    {
+        calculatePitchInfo (midiNote, currentPitchWheelPosition);
+        
+        createExcitation (velocity);
+        
+        playing = true;
+        tailoff = false;
+    }
     
-    createExcitation (velocity);
+    else
+    {
+        playing = false;
+    }
     
-    playing = true;
-    tailoff = false;
+
 }
 
 void Voice::stopNote(float velocity, bool allowTailOff)
@@ -108,15 +118,8 @@ void Voice::setVoiceParams (float L, float rho, float S, float mu, float t60, fl
 
 void Voice::calculatePitchInfo(int midiNote, int pitchWheelPosition)
 {
-    if (midiNote > 96)
-    {
-        currentNote = 0;
-    }
-    else
-    {
-        currentNote = midiNote;
-    }
-    
+    currentNote = midiNote;
+
     // frequency taking into account pitch bend
     float freq = 440 * std::pow(2, (midiNote - 69) / 12.f + (pitchWheelPosition - 8192) / (12.f * 16384 / (2 * mPitchBendSemitones)));
     

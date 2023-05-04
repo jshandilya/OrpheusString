@@ -1,8 +1,10 @@
 # EP-491-String
 
+![](Images/Orpheus.png)
+
 ## Project Description 
 
-String physical modeling insturment plugin in VST3 and AU format, written in C++ and the JUCE framework. 
+String physical modeling instrument plugin in VST3 and AU format, written in C++ and the JUCE framework. 
 
 Project for Advanced Projects in Electronic Production and Design (EP-491) at Berklee College of Music.
 
